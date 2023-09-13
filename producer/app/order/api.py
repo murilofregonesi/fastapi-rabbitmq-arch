@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from .model import Order
 from .schema import OrderSchema, CreateOrderSchema
+from app.auth.utils import get_current_active_user
+from app.user.model import User
 
 
 order_router = APIRouter(
@@ -45,13 +47,17 @@ def get_order(order_id: int, db: Session = Depends(get_db)):
     return order
 
 @order_router.post('/', status_code=status.HTTP_204_NO_CONTENT)
-def create_order(body: CreateOrderSchema, db: Session = Depends(get_db)):
+def create_order(
+    body: CreateOrderSchema,
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    db: Session = Depends(get_db),
+):
     """Create an order.
 
     Args:
         body (CreateOrderSchema): Order details
     """
-    order = Order(details=body.details)
+    order = Order(details=body.details, user_id=current_user.id)
 
     db.add(order)
     db.commit()

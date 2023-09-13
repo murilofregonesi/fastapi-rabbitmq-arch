@@ -13,6 +13,6 @@ class Order(Base):
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     created_by = Column(Integer, ForeignKey('user.id'), nullable=False, index=True)
 
-    def __init__(self, details: str):
+    def __init__(self, details: str, user_id: int):
         self.details = details
-        self.created_by = 3  # TODO change to authenticated user
+        self.created_by = user_id

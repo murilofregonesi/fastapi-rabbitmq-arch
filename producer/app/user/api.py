@@ -58,6 +58,7 @@ def create_user(body: CreateUserSchema, db: Annotated[Session, Depends(get_db)])
     user = User(
         name=body.name,
         email=body.email,
+        password=body.password,
     )
 
     db.add(user)
