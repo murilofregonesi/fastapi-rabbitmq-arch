@@ -6,6 +6,7 @@ from app.user.api import user_router
 from app.order.api import order_router
 from app.auth.api import auth_router
 from app.database import Base, engine
+from . import logger
 
 # import all model files for database recognition
 from app.user import model
@@ -19,3 +20,5 @@ app = FastAPI()
 app.include_router(user_router)
 app.include_router(order_router)
 app.include_router(auth_router)
+
+logger.info('Producer initialized.')

@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from .model import User
 from .schema import UserSchema, CreateUserSchema
 from app.database import get_db
+from app import logger
 
 
 user_router = APIRouter(
@@ -60,6 +61,7 @@ def create_user(body: CreateUserSchema, db: Annotated[Session, Depends(get_db)])
         email=body.email,
         password=body.password,
     )
+    logger.info(f'New user created: {body.email}')
 
     db.add(user)
     try:

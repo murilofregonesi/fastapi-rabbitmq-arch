@@ -8,6 +8,7 @@ from .model import Order
 from .schema import OrderSchema, CreateOrderSchema
 from app.auth.utils import get_current_active_user
 from app.user.model import User
+from app import logger
 
 
 order_router = APIRouter(
@@ -58,6 +59,7 @@ def create_order(
         body (CreateOrderSchema): Order details
     """
     order = Order(details=body.details, user_id=current_user.id)
+    logger.info(f'New order created by {current_user.id}')
 
     db.add(order)
     db.commit()
