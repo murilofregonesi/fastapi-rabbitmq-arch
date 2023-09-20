@@ -4,7 +4,7 @@ services:
     container_name: 'postgres'
     restart: always
     ports:
-      - 5442:5432
+      - 5732:5432
     environment:
       - POSTGRES_PASSWORD=fast
       - POSTGRES_DB=fast
@@ -13,8 +13,8 @@ services:
     image: rabbitmq:3.12-management-alpine
     container_name: 'rabbitmq'
     ports:
-      - 5672:5672
-      - 15672:15672
+      - 5772:5672
+      - 15772:15672
     environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=admin
