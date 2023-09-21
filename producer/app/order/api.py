@@ -9,6 +9,7 @@ from .schema import OrderSchema, CreateOrderSchema
 from app.auth.utils import get_current_active_user
 from app.user.model import User
 from app import logger
+from app.rmq_connector import RMQExchangeConnector
 
 
 order_router = APIRouter(
@@ -61,5 +62,13 @@ def create_order(
     order = Order(details=body.details, user_id=current_user.id)
     logger.info(f'New order created by {current_user.id}')
 
-    db.add(order)
-    db.commit()
+    with RMQExchangeConnector(exchange='producer_log', exchange_type='topic') as rmq:
+        try:
+            db.add(order)
+            db.commit()
+
+            routing_key = rmq.create_queue('order.info')
+            rmq.basic_publish(routing_key=routing_key, body=f'New order created by {current_user.id}.')
+        except Exception:
+            routing_key = rmq.create_queue('order.error')
+            rmq.basic_publish(routing_key=routing_key, body=f'Order creation failed to user {current_user.id}.')

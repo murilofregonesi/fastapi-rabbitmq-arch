@@ -8,6 +8,7 @@ from .model import User
 from .schema import UserSchema, CreateUserSchema
 from app.database import get_db
 from app import logger
+from app.rmq_connector import RMQExchangeConnector
 
 
 user_router = APIRouter(
@@ -63,11 +64,18 @@ def create_user(body: CreateUserSchema, db: Annotated[Session, Depends(get_db)])
     )
     logger.info(f'New user created: {body.email}')
 
-    db.add(user)
-    try:
-        db.commit()
-    except IntegrityError:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail='Email already registered',
-        )
+    with RMQExchangeConnector(exchange='producer_log', exchange_type='topic') as rmq:
+        db.add(user)
+        try:
+            db.commit()
+
+            routing_key = rmq.create_queue('user.info')
+            rmq.basic_publish(routing_key=routing_key, body=f'User {body.email} created.')
+        except IntegrityError:
+            routing_key = rmq.create_queue('user.error')
+            rmq.basic_publish(routing_key=routing_key, body=f'User creation failed to email {body.email}.')
+
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail='Email already registered',
+            )
