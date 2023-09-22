@@ -67,8 +67,8 @@ def create_order(
             db.add(order)
             db.commit()
 
-            routing_key = rmq.create_queue('order.info')
+            routing_key = rmq.create_queue(queue='order.info', binding_key='order.*')
             rmq.basic_publish(routing_key=routing_key, body=f'New order created by {current_user.id}.')
         except Exception:
-            routing_key = rmq.create_queue('order.error')
+            routing_key = rmq.create_queue(queue='order.error', binding_key='order.error')
             rmq.basic_publish(routing_key=routing_key, body=f'Order creation failed to user {current_user.id}.')

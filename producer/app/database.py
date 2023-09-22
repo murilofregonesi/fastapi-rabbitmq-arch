@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 engine = create_engine(
-    os.environ.get('SQLALCHEMY_DATABASE_URI'),
+    os.environ.get('SQLALCHEMY_DATABASE_URI', 'postgresql://postgres:fast@postgres:5432/fast'),
 )
 
 SessionLocal = sessionmaker(

@@ -16,8 +16,8 @@ services:
       - 5772:5672
       - 15772:15672
     environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=admin
+      - RABBITMQ_DEFAULT_USER=fast
+      - RABBITMQ_DEFAULT_PASS=fast
 
   producer:
     depends_on:

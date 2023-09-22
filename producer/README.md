@@ -6,6 +6,7 @@ The API responsible for producing events requisitions, such as the creation of n
 
 ### Local
 
+- Create a `.env` file based on the example available. Default values are used by the **compose.yaml** file.
 - Create a virtual environment
 - Install all the dependencies
 - Run a local development server

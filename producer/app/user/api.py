@@ -69,10 +69,10 @@ def create_user(body: CreateUserSchema, db: Annotated[Session, Depends(get_db)])
         try:
             db.commit()
 
-            routing_key = rmq.create_queue('user.info')
+            routing_key = rmq.create_queue(queue='user.info', binding_key='user.*')
             rmq.basic_publish(routing_key=routing_key, body=f'User {body.email} created.')
         except IntegrityError:
-            routing_key = rmq.create_queue('user.error')
+            routing_key = rmq.create_queue(queue='user.error', binding_key='user.error')
             rmq.basic_publish(routing_key=routing_key, body=f'User creation failed to email {body.email}.')
 
             raise HTTPException(
