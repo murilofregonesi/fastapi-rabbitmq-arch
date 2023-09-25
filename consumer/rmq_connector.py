@@ -1,5 +1,5 @@
 import os
-from typing import Union
+from typing import Union, Callable
 
 import pika
 
@@ -44,6 +44,7 @@ class RMQExchangeConnector():
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Exit the context manager closing the connection.
         """
+        self.channel.stop_consuming()
         self.channel.close()
         self.connection.close()
 
@@ -80,22 +81,22 @@ class RMQExchangeConnector():
         )
         return queue_name
 
-    def basic_publish(self, body: str, routing_key: str = ''):
-        """Publish a message to the broker.
+    def basic_consume(self, queue_name: str, callback: Callable, auto_ack: bool = True):
+        """Consume messages from a queue.
 
         Args:
-            body (str): Message to be published
-            routing_key (str, optional): Key to route the message. Defaults to ''
-                '' to 'fanout' exchange type
-                Queue's name to 'direct' exchange type
-                Topic to 'topic' exchange type, e.g. *.error#
+            queue_name (str): Queue's name
+            callback (Callable): Callback dispatched on message
+            auto_ack (bool, optional): Auto acknowledgment. Defaults to True.
+                If False, callback must handle acknowledgment
         """
-        self.channel.basic_publish(
-            exchange=self.exchange,
-            routing_key=routing_key,
-            body=body,
-            properties=pika.BasicProperties(
-                content_type='',
-                delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE,
-            )
+        self.channel.basic_consume(
+            queue=queue_name,
+            on_message_callback=callback,
+            auto_ack=auto_ack,
         )
+
+    def start_consuming(self):
+        """Dispatch basic_consume callbacks until all consumers are cancelled.
+        """
+        self.channel.start_consuming()
