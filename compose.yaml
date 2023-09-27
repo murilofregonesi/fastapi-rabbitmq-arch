@@ -30,7 +30,6 @@ services:
     volumes:
       - ./tmp:/code/logs
 
-  # TODO pika.exceptions.AMQPConnectionError
   consumer:
     depends_on:
       - postgres

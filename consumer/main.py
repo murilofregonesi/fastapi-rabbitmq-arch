@@ -7,6 +7,7 @@ from callbacks import (
     oder_info_callback,
     oder_error_callback,
 )
+from log import logger
 
 
 load_dotenv()
@@ -24,7 +25,7 @@ if __name__ == '__main__':
         rmq.basic_consume(oder_error_queue, oder_error_callback)
 
         try:
-            print('Consumer started...')
+            logger.info('Consumer initialized.')
             rmq.start_consuming()
         except KeyboardInterrupt:
-            print('...Consumer stopped')
+            logger.info('Consumer stopped.')

@@ -25,6 +25,8 @@ class RMQExchangeConnector():
                     username=os.environ.get('PIKA_USER', 'fast'),
                     password=os.environ.get('PIKA_PASS', 'fast'),
                 ),
+                connection_attempts=10,
+                retry_delay=5,
             )
         )
         self.exchange = exchange
