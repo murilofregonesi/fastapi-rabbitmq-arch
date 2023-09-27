@@ -6,9 +6,9 @@ logger.setLevel(logging.INFO)
 
 # create file handler on Container or Local structure
 try:
-    log_handler = logging.FileHandler('./logs/producer.log')
+    log_handler = logging.FileHandler('./logs/consumer.log')
 except FileNotFoundError:
-    log_handler = logging.FileHandler('./producer.log')
+    log_handler = logging.FileHandler('./consumer.log')
 
 log_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 log_handler.setFormatter(log_formatter)

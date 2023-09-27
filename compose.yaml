@@ -27,3 +27,15 @@ services:
     container_name: 'producer'
     ports:
       - 8000:8000
+    volumes:
+      - ./tmp:/code/logs
+
+  # TODO pika.exceptions.AMQPConnectionError
+  consumer:
+    depends_on:
+      - postgres
+      - rabbitmq
+    build: ./consumer/
+    container_name: 'consumer'
+    volumes:
+      - ./tmp:/code/logs

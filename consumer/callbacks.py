@@ -1,19 +1,18 @@
+from log import logger
+
+
 def user_info_callback(ch, method, properties, body):
     del ch, method, properties
-    print('Callback: user_info_callback')
-    print(body.decode('UTF-8'))
+    logger.info(f"user_info: {body.decode('UTF-8')}")
 
 def user_error_callback(ch, method, properties, body):
     del ch, method, properties
-    print('Callback: user_error_callback')
-    print(body.decode('UTF-8'))
+    logger.error(f"user_error: {body.decode('UTF-8')}")
 
 def oder_info_callback(ch, method, properties, body):
     del ch, method, properties
-    print('Callback: oder_info_callback')
-    print(body.decode('UTF-8'))
+    logger.info(f"oder_info: {body.decode('UTF-8')}")
 
 def oder_error_callback(ch, method, properties, body):
     del ch, method, properties
-    print('Callback: oder_error_callback')
-    print(body.decode('UTF-8'))
+    logger.error(f"oder_error: {body.decode('UTF-8')}")
