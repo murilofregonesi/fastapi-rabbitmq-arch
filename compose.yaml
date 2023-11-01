@@ -19,14 +19,25 @@ services:
       - RABBITMQ_DEFAULT_USER=fast
       - RABBITMQ_DEFAULT_PASS=fast
 
-  producer:
+  producer_1:
     depends_on:
       - postgres
       - rabbitmq
     build: ./producer/
-    container_name: 'producer'
+    container_name: 'producer_1'
     ports:
-      - 8000:8000
+      - 8001:8000
+    volumes:
+      - ./tmp:/code/logs
+
+  producer_2:
+    depends_on:
+      - postgres
+      - rabbitmq
+    build: ./producer/
+    container_name: 'producer_2'
+    ports:
+      - 8002:8000
     volumes:
       - ./tmp:/code/logs
 
@@ -38,3 +49,12 @@ services:
     container_name: 'consumer'
     volumes:
       - ./tmp:/code/logs
+
+  nginx:
+    depends_on:
+      - producer_1
+      - producer_2
+    build: ./nginx/
+    container_name: 'nginx'
+    ports:
+      - 8080:8080

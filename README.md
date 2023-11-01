@@ -18,6 +18,7 @@ Extra features implemented:
 
 ## Running via Docker
 
-- Run `sudo docker-compose up --build --force` on the repository root.
-- Producer's API docs will be available on `http://localhost:8000/docs`
-- RabbitMQ management tool will be available on `http://localhost:15772`
+- Run `sudo docker-compose up --build --force` on the repository root
+- Producer's API docs is available on `http://localhost:8000/docs`
+- RabbitMQ management tool is available on `http://localhost:15772`
+- Log of both services are available on Docker's volume `./tmp`
