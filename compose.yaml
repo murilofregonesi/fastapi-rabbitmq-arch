@@ -52,6 +52,8 @@ services:
 
   nginx:
     depends_on:
+      - postgres
+      - rabbitmq
       - producer_1
       - producer_2
     build: ./nginx/

@@ -10,7 +10,7 @@ The main technologies involved are:
 - [x] **FastAPI** as web framework
 - [x] **RabbitMQ** as message broker
 - [x] **Docker** as environment builder
-- [ ] **Nginx** as HTTP server
+- [x] **Nginx** as HTTP server
 
 Extra features implemented:
 - [x] **SQLAlchemy** as ORM
@@ -20,5 +20,18 @@ Extra features implemented:
 
 - Run `sudo docker-compose up --build --force` on the repository root
 - Producer's API docs is available on `http://localhost:8000/docs`
-- RabbitMQ management tool is available on `http://localhost:15772`
+- **RabbitMQ** management tool is available on `http://localhost:15772`
 - Log of both services are available on Docker's volume `./tmp`
+
+## Results
+
+* **FastAPI** application with *logging* system.
+<br>![alt text](./images/api.png)
+<br>![alt text](./images/logging.png)
+
+* **RabbitMQ** as message broker.
+<br>![alt text](./images/queues.png)
+<br>![alt text](./images/messages.png)
+
+* **Nginx** applied as a reverse proxy, performing load balancing between two API instances.
+<br>![alt text](./images/producers-nginx.png)
